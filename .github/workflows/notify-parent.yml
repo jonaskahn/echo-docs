@@ -1,0 +1,19 @@
+name: Notify Parent (Echo Docs)
+
+on:
+  push:
+    branches: [ "main" ]
+  workflow_dispatch:
+
+jobs:
+  notify:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Dispatch event to parent repository
+        uses: peter-evans/repository-dispatch@v3
+        with:
+          token: ${{ secrets.PARENT_REPO_TOKEN }}
+          repository: jonaskahn/echo
+          event-type: docs-updated
+          client-payload: |
+            {"ref": "${{ github.ref }}", "sha": "${{ github.sha }}"}
